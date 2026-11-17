@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101916">
+  <meta name="description" content="أثر — مساحة عربية لتلاوة القرآن وتدبّره، ومتابعة وردك، وتصميم بطاقات قرآنية قابلة للمشاركة.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>أثر | لحظة مع القرآن</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23064e3b'/%3E%3Cpath d='M32 26q-9-7-20-4v22q11-3 20 4 9-7 20-4V22q-11-3-20 4v22m0-35v8m-4-4h8' fill='none' stroke='%23d4af37' stroke-width='2.5' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.13"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.26.10/babel.min.js"></script>
+  <style>
+    :root {
+      color-scheme:dark; --bg:#101916; --surface:#15211c; --surface2:#192722; --cream:#f8fafc;
+      --gold:#d4af37; --light-gold:#e7c875; --muted:#a9b6ae; --line:#2b3c34;
+      --ui:"Cairo",Tahoma,sans-serif; --quran:"Amiri","Times New Roman",serif;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:88px}
+    body{margin:0;background:radial-gradient(ellipse at 82% 2%,#192820 0,transparent 43%),var(--bg);color:var(--cream);font-family:var(--ui);font-size:14px;line-height:1.65}
+    h1,h2,h3,p,figure,blockquote{margin:0}
+    a{color:inherit;text-decoration:none}
+    button,select,input,textarea{font:inherit}
+    button{cursor:pointer;color:inherit}
+    button:disabled{cursor:wait;opacity:.6}
+    button,select,a,input{ -webkit-tap-highlight-color:transparent }
+    :focus-visible{outline:2px solid var(--light-gold);outline-offset:4px}
+    [id]{scroll-margin-top:14px}
+    .shell{width:min(1216px,calc(100% - 64px));margin-inline:auto}
+    .icon{display:inline-block;vertical-align:middle;flex:none;width:20px;height:20px}
+    .skip{position:fixed;z-index:30;top:10px;right:16px;transform:translateY(-170%);background:var(--light-gold);color:#171a13;padding:8px 16px;border-radius:8px}
+    .skip:focus{transform:none}
+    .site-head{position:sticky;top:0;z-index:10;height:70px;border-bottom:1px solid #29382e;background:#101916ed;backdrop-filter:blur(14px)}
+    .head-inner{height:100%;display:flex;align-items:center;justify-content:space-between;position:relative}
+    .brand{display:inline-flex;align-items:center;gap:11px;white-space:nowrap}
+    .brand-icon{width:43px;height:43px;border:1px solid #d4af3752;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,#314031,#182a22);color:var(--light-gold)}
+    .brand-icon svg{width:27px;height:27px}
+    .brand-text{display:grid;line-height:1.1}
+    .brand-text strong{font-size:27px;line-height:1.15;font-weight:800}
+    .brand-text small{direction:ltr;text-align:right;margin-top:4px;color:#b7a879;font-size:9px;letter-spacing:.24em;font-family:system-ui,sans-serif}
+    .nav{display:flex;gap:9px;align-items:center;position:absolute;right:50%;transform:translateX(50%);white-space:nowrap}
+    .nav a{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:9px;color:var(--muted);font-weight:700;font-size:13px;transition:color .18s,background .18s}
+    .nav a .icon{width:17px;height:17px}
+    .nav a:hover,.nav a[aria-current]{color:var(--light-gold);background:#d4af3712}
+    .date-pill{display:inline-flex;align-items:center;gap:8px;color:#c3ccc5;border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:12px}
+    .date-pill .icon{color:var(--light-gold);width:15px;height:15px}
+    .intro{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:31px 0 25px;min-height:178px}
+    .intro-copy{position:relative;z-index:1}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#d4af370e;border:1px solid #d4af372e;color:var(--light-gold);padding:3px 11px;border-radius:99px;font-size:11px;font-weight:700}
+    .eyebrow .icon{width:14px;height:14px}
+    .intro h1{font-size:clamp(34px,4.5vw,56px);line-height:1.22;font-weight:800;margin:7px 0 5px}
+    .intro h1 em{color:var(--light-gold);font-style:normal}
+    .intro p{color:var(--muted);font-size:14px}
+    .intro-art{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center;min-width:300px;min-height:124px;color:#d8c493}
+    .intro-art .rosette{position:absolute;z-index:-1;width:155px;height:155px;left:20px;top:-13px;opacity:.24;color:var(--gold)}
+    .intro-art span{font:22px/1.4 var(--quran);padding:6px 16px;background:radial-gradient(ellipse,#17241dfc 30%,#17241d00 75%)}
+    .intro-art::before,.intro-art::after{content:"";width:5px;height:5px;background:#d4af3777;transform:rotate(45deg)}
+    .dashboard{display:grid;grid-template-columns:minmax(0,2.05fr) minmax(302px,1fr);gap:18px;align-items:stretch}
+    .panel{border:1px solid var(--line);border-radius:21px;background:var(--surface);box-shadow:0 14px 40px #0002;min-width:0}
+    .verse-panel{display:flex;flex-direction:column;position:relative;isolation:isolate;overflow:hidden;padding:20px 22px 18px;background:radial-gradient(ellipse at 50% 0,#174c39 0,transparent 74%),linear-gradient(125deg,#0c2b23,#103a2d 58%,#0d3027);border-color:#345445}
+    .verse-panel::before,.verse-panel::after{content:"";position:absolute;z-index:-1;pointer-events:none}
+    .verse-panel::before{inset:0;background:var(--pattern);opacity:.19;mask-image:linear-gradient(90deg,#000,transparent 67%)}
+    .verse-panel::after{inset:8px;border:1px solid #dbbd6829;border-radius:15px;mask-image:linear-gradient(90deg,#000,transparent 24%,transparent 76%,#000)}
+    .hero-ornament{position:absolute;z-index:-1;inset:auto auto 16px -78px;width:270px;height:270px;color:#ddbd72;opacity:.13;pointer-events:none}
+    .panel-top,.section-heading,.tracker-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .day-tag{display:inline-flex;align-items:center;gap:8px;color:#f1d68d;background:#e4c67114;border:1px solid #e4c67144;border-radius:9px;padding:5px 10px;font-weight:700;font-size:12px}
+    .day-tag .icon{width:16px;height:16px}
+    .icon-btn{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;border:1px solid #e0d8ac35;background:#102c226e;color:#d7dfd5;transition:background .2s,color .2s}
+    .icon-btn:hover,.icon-btn[aria-pressed=true]{background:#d4af3724;color:var(--light-gold)}
+    .icon-btn .icon{width:17px;height:17px}
+    .verse-body{display:grid;justify-items:center;align-content:center;text-align:center;min-height:134px;padding:13px 4px 10px;flex:1}
+    .verse-text{font:400 clamp(35px,4.4vw,58px)/1.56 var(--quran);color:#fff4d8;text-shadow:0 4px 18px #091c13a0}
+    .verse-meta{display:flex;align-items:center;justify-content:center;gap:9px;font-size:12px;color:#e1c981;font-weight:700}
+    .verse-meta::before,.verse-meta::after{content:"";width:19px;height:1px;background:#e3c57669}
+    .reflection{display:flex;align-items:flex-start;gap:10px;background:#071f1880;border:1px solid #6b8d762e;border-radius:11px;padding:9px 12px;margin:3px 0 11px}
+    .reflection>.icon{width:17px;height:17px;margin-top:3px;color:var(--light-gold)}
+    .reflection strong{display:block;color:#ebd299;font-size:11px;line-height:1.3;margin-bottom:3px}
+    .reflection p{font-size:12px;color:#d8e5dc}
+    .audio-box{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:11px;border:1px solid #76958339;background:#09251ecc;padding:8px 10px;border-radius:11px}
+    .audio-play{display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:50%;background:linear-gradient(150deg,#f3d686,#d4ad4f);color:#20281a;box-shadow:0 2px 9px #0004;transition:filter .2s,transform .2s}
+    .audio-play:hover,.primary:hover{filter:brightness(1.1)}
+    .audio-play:active{transform:scale(.94)}
+    .audio-play .icon{width:17px;height:17px;fill:currentColor}
+    .audio-info{min-width:0;display:grid;gap:3px}
+    .audio-label{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:11px;color:#e7eee9}
+    .audio-label small{color:#b3c4bb;font-size:10px;font-family:system-ui,sans-serif;white-space:nowrap}
+    .range{-webkit-appearance:none;appearance:none;display:block;width:100%;height:4px;border-radius:8px;margin:5px 0;background:linear-gradient(to right,var(--light-gold) var(--filled,0%),#3b5549 var(--filled,0%));cursor:pointer;direction:ltr}
+    .range::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;border:0;border-radius:50%;background:var(--light-gold)}
+    .range::-moz-range-thumb{width:11px;height:11px;border:0;border-radius:50%;background:var(--light-gold)}
+    .speed{border-radius:7px;border:1px solid #6b877745;background:#1b382e;color:#e8dfc9;font:600 11px/1 system-ui,sans-serif;min-width:42px;padding:7px 5px;text-align:center}
+    .audio-error{padding-top:5px;color:#f2d5af;font-size:11px}
+    .tracker{display:flex;flex-direction:column;padding:18px}
+    .title-group{display:flex;align-items:center;gap:10px;min-width:0}
+    .tile-icon{display:grid;place-items:center;width:40px;height:40px;border:1px solid #d4af3738;border-radius:11px;background:#d4af3712;color:var(--light-gold);flex:none}
+    .tile-icon .icon{width:20px;height:20px}
+    .tracker h2{font-size:17px;font-weight:800;line-height:1.35}
+    .tracker-top p{color:var(--muted);font-size:11px;margin-top:3px}
+    .subtle{display:inline-flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;border:1px solid #3d4b3e;background:#202e26;border-radius:8px;padding:5px 8px;color:#d7c894;font-size:11px;font-weight:700;transition:border-color .2s,background .2s}
+    .subtle:hover{background:#2e3c2d;border-color:#b49b52}
+    .subtle .icon{width:14px;height:14px}
+    .progress-block{margin:15px 0 12px}
+    .progress-label{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:#b9c8bd;font-weight:600;margin-bottom:6px}
+    .progress-label b{color:var(--light-gold)}
+    .progress-track{height:5px;border-radius:99px;background:#304139;overflow:hidden}
+    .progress-fill{height:100%;width:var(--progress,0%);background:linear-gradient(270deg,#f0d28d,#bc9537);border-radius:99px;transition:width .28s ease}
+    .tasks{display:grid;gap:6px}
+    .task{display:flex;align-items:center;gap:9px;position:relative;border:1px solid #2d4035;background:#1b2a23;border-radius:8px;padding:6px 8px;min-height:37px;cursor:pointer;color:#dbe4dd;font-size:12px;transition:background .2s,border-color .2s}
+    .task:hover{border-color:#617c69}
+    .task:has(input:checked){background:#1a352b;border-color:#547a58}
+    .task:has(input:focus-visible){outline:2px solid var(--light-gold);outline-offset:2px}
+    .task input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+    .check-icon{display:grid;place-items:center;width:16px;height:16px;border:1px solid #637d6e;border-radius:4px;color:transparent;flex:none}
+    .check-icon .icon{width:12px;height:12px;stroke-width:2.5}
+    .task input:checked + .check-icon{border-color:#d9b75e;background:#d9b75e;color:#17261b}
+    .task-number{margin-inline-start:auto;color:#9bad9f;font-size:11px}
+    .tracker-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:auto;padding-top:13px}
+    .outline-btn,.share-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:8px;min-height:35px;padding:5px;border:1px solid var(--line);background:#1c2a23;color:#d9e2db;font-weight:700;font-size:11px;transition:background .2s,border-color .2s}
+    .outline-btn .icon,.share-btn .icon{width:14px;height:14px}
+    .share-btn{border-color:#e0bd5e60;color:#efd68e;background:#d4af3716}
+    .outline-btn:hover{background:#28382e;border-color:#5e7565}
+    .share-btn:hover{background:#d4af372f}
+    .section-heading{margin:29px 0 13px}
+    .section-heading h2{font-size:23px;font-weight:800;line-height:1.35}
+    .section-heading p{color:var(--muted);font-size:12px;margin-top:3px}
+    .section-heading .tile-icon{width:44px;height:44px}
+    .format-tag{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:8px;padding:5px 9px;color:#c6d2c9;font-size:11px;white-space:nowrap}
+    .format-tag .icon{color:var(--light-gold);width:15px;height:15px}
+    .studio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.04fr);overflow:hidden}
+    .controls{padding:21px 23px 23px;display:grid;gap:15px;align-content:start}
+    .field-title{display:block;color:#e9ede9;font-size:12px;font-weight:800;margin-bottom:6px}
+    .section-mini{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .section-mini h3,.stage-label{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:800}
+    .section-mini .icon,.stage-label .icon{width:16px;height:16px;color:var(--light-gold)}
+    .data-status{color:#a9b9ad;font-size:10px;text-align:left}
+    .select-row,.adjust-row{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+    .select-shell{position:relative}
+    .select-shell .icon{position:absolute;left:10px;top:12px;pointer-events:none;width:15px;height:15px;color:#b7c8bc}
+    select{appearance:none;display:block;width:100%;border:1px solid #3a4c40;border-radius:9px;min-height:40px;background:#101c17;color:#e7eee8;padding:7px 10px 7px 32px;font-size:12px}
+    .separator{height:1px;background:#2a3a31}
+    .swatches{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+    .swatch{background:none;border:0;min-width:0;padding:0;color:#b8c6bc;font-size:10px;text-align:center}
+    .swatch-preview{display:block;height:48px;position:relative;isolation:isolate;overflow:hidden;border:1px solid #526056;border-radius:8px;margin-bottom:4px;transition:border-color .2s,transform .2s}
+    .swatch:hover .swatch-preview{transform:translateY(-2px);border-color:#c0ab70}
+    .swatch[aria-pressed=true]{color:#f2d78d;font-weight:800}
+    .swatch[aria-pressed=true] .swatch-preview{border-color:#ebc969;box-shadow:0 0 0 1px #ebc96950}
+    .swatch-check{position:absolute;inset:4px auto auto 4px;display:grid;place-items:center;border-radius:50%;width:16px;height:16px;background:#efd189;color:#18261c}
+    .swatch-check .icon{width:11px;height:11px;stroke-width:2.6}
+    .slider-box,.align-box{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:37px;padding:5px 9px;border:1px solid #34463b;border-radius:8px;background:#101c17}
+    .slider-box output{font-size:11px;color:#ebd28b;white-space:nowrap}
+    .align-box{padding:3px 5px;gap:5px}
+    .align-box button{display:grid;place-items:center;flex:1;height:28px;padding:0;border:0;border-radius:5px;color:#b1c4b7;background:transparent}
+    .align-box button:hover,.align-box button[aria-pressed=true]{color:#f1d58b;background:#d4af3722}
+    .align-box .icon{width:16px;height:16px}
+    .switch-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid #34463b;border-radius:8px;background:#18271f;cursor:pointer}
+    .switch-row strong{display:block;font-size:12px}
+    .switch-row small{display:block;color:#a9b8ad;font-size:10px}
+    .switch{appearance:none;flex:none;width:35px;height:19px;border:1px solid #5e7265;border-radius:99px;background:#30453a;position:relative;cursor:pointer;transition:background .2s}
+    .switch::after{content:"";position:absolute;right:3px;top:3px;width:11px;height:11px;border-radius:50%;background:#d2dcd5;transition:transform .2s}
+    .switch:checked{background:#d7b35d;border-color:#d7b35d}
+    .switch:checked::after{transform:translateX(-16px);background:#19271d}
+    .primary{display:inline-flex;justify-content:center;align-items:center;gap:8px;width:100%;min-height:41px;border:1px solid #eac978;border-radius:9px;background:linear-gradient(125deg,#e9c773,#d8ae54);color:#20241a;font-weight:800;font-size:13px;transition:filter .2s}
+    .primary .icon{width:17px;height:17px}
+    .stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;position:relative;min-width:0;padding:15px 17px 18px;border-inline-start:1px solid var(--line);background:radial-gradient(ellipse at center,#22382b99,transparent 74%),radial-gradient(circle,#7c97824a 1px,transparent 1.4px),#101b16;background-size:auto,17px 17px,auto}
+    .stage-bar{align-self:stretch;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#d1ded4}
+    .stage-bar small{font-size:10px;color:#c1cfc4;direction:ltr;border:1px solid #435449;padding:2px 6px;border-radius:5px;background:#15231c}
+    .card-frame{width:min(100%,270px);padding:0;box-shadow:0 10px 34px #0008}
+    .export-card{display:flex;flex-direction:column;align-items:center;position:relative;isolation:isolate;aspect-ratio:9/16;width:100%;overflow:hidden;color:#fff2cd;padding:13% 9% 11%;border-radius:3px;text-align:center;container-type:inline-size}
+    .export-card::after{content:"";position:absolute;inset:4%;border:1px solid #e4c67996;pointer-events:none;z-index:2}
+    .art{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+    .art svg{display:block;width:100%;height:100%;position:absolute;inset:0}
+    .art.geo{background:radial-gradient(ellipse at center,#164636 0,#0b271f 67%,#071b16 100%)}
+    .art.geo::before{content:"";position:absolute;inset:0;background:var(--pattern);background-size:56px 56px;opacity:.4}
+    .art.geo::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,#0d3026f7 8%,#0d3026ab 45%,transparent 75%)}
+    .art.night{background:radial-gradient(ellipse at 65% 29%,#26375d,#131f3b 51%,#0d1325 80%)}
+    .art.dunes{background:linear-gradient(#203a40,#7e583d 67%,#483322)}
+    .art.emerald{background:radial-gradient(ellipse at 48% 30%,#1b5b45,#093529 57%,#06251d)}
+    .card-brand{font:700 19px/1.2 var(--quran);color:#efdaa2}
+    .card-brand .icon{width:23px;height:23px;display:block;margin:0 auto 3px;stroke-width:1.5}
+    .card-main{display:flex;flex-direction:column;justify-content:center;gap:7px;margin:auto 0;width:100%;min-height:0}
+    .card-verse{font-family:var(--quran);font-size:var(--print-size);line-height:1.47;letter-spacing:normal;overflow-wrap:anywhere}
+    @supports (width: 1cqi){.card-verse{font-size:min(var(--print-size),var(--print-fluid))}}
+    .card-meta{color:#efd893;font-size:10px;font-weight:800}
+    .card-tafsir{border-top:1px solid #e9cc7d45;padding-top:6px;margin-top:2px;font-size:9px;line-height:1.65;color:#f5e9ce;overflow-wrap:anywhere}
+    .card-tafsir small{display:block;font-size:8px;color:#efd893;margin-top:2px}
+    .ornament-line{display:flex;align-items:center;gap:6px;color:#f0ce7c;width:max-content;margin:1px auto}
+    .ornament-line::after,.ornament-line::before{content:"";height:1px;width:19px;background:#f0ce7c80}
+    .ornament-line i{width:4px;height:4px;background:currentColor;transform:rotate(45deg)}
+    .stage-note{font-size:10px;color:#abbdb0;text-align:center}
+    .fit-note{color:#ead18a;font-size:11px}
+    .site-footer{margin-top:28px;padding:17px 0 24px;border-top:1px solid #2a3b31;color:#aab9ae;font-size:11px}
+    .footer-inner{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .footer-inner strong{color:var(--light-gold);font-weight:800}
+    .footer-inner a:hover{color:var(--light-gold)}
+    .mobile-nav{display:none}
+    .toast{position:fixed;inset:auto auto 24px 24px;z-index:20;max-width:min(370px,calc(100% - 36px));padding:10px 13px;border:1px solid #76845f;border-radius:11px;background:#22372b;color:#fff0ce;box-shadow:0 7px 22px #0007;font-size:13px;animation:pop-in .2s ease}
+    @keyframes pop-in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+    dialog{width:min(465px,calc(100% - 30px));max-height:calc(100% - 34px);margin:auto;padding:20px;overflow:auto;border:1px solid #526b57;border-radius:16px;background:#192820;color:var(--cream);box-shadow:0 22px 70px #0009}
+    dialog::backdrop{background:#07100dbb;backdrop-filter:blur(4px)}
+    .dialog-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+    .dialog-head h2{font-size:18px;font-weight:800}
+    .dialog-copy{font-size:13px;color:#d6e0d8;margin-bottom:10px}
+    .dialog-source{font-size:11px;color:var(--light-gold)}
+    .part-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+    .part-grid button{height:36px;border-radius:7px;border:1px solid #4a6251;background:#203529;color:#e0e9e2}
+    .part-grid button[aria-pressed=true]{background:#deb95d;color:#172518;border-color:#deb95d;font-weight:800}
+    .share-copy{width:100%;height:120px;resize:vertical;border:1px solid #607767;border-radius:8px;background:#101c17;padding:8px;color:var(--cream)}
+    .boot{min-height:100vh;display:grid;place-items:center;color:#e4c77f}
+    @media(max-width:1000px){.shell{width:calc(100% - 44px)}.dashboard{gap:13px;grid-template-columns:minmax(0,1.6fr) minmax(285px,1fr)}.panel{border-radius:17px}.tracker{padding:15px}.verse-panel{padding-inline:16px}.controls{padding:17px}.section-heading{margin-top:24px}}
+    @media(max-width:720px){
+      html{scroll-padding-top:66px}.shell{width:calc(100% - 28px)}.site-head{height:58px}.brand-icon{width:36px;height:36px;border-radius:10px}.brand-icon svg{width:22px;height:22px}.brand-text strong{font-size:23px}.brand-text small{font-size:8px}
+      .site-head .nav{display:none}.mobile-nav{display:grid;grid-template-columns:repeat(3,1fr);position:fixed;z-index:10;bottom:0;inset-inline:0;background:#111e18f5;border-top:1px solid #37493c;backdrop-filter:blur(12px);padding:4px 6px calc(4px + env(safe-area-inset-bottom));gap:4px}.mobile-nav a{display:grid;justify-items:center;align-content:center;gap:2px;padding:5px 2px;min-height:45px;border-radius:8px;font-size:10px;font-weight:800;color:#b3c2b6}.mobile-nav a[aria-current]{background:#d4af3717;color:#f0d184}.mobile-nav .icon{width:17px;height:17px}
+      .intro{padding:21px 0 18px;min-height:0;overflow:hidden}.intro h1{margin-block:6px}.intro p{font-size:12px;max-width:39ch}.intro-art{position:absolute;inset:0 auto 0 -38px;min-width:155px;pointer-events:none}.intro-art .rosette{opacity:.14;left:-4px;top:2px}.intro-art span,.intro-art::before,.intro-art::after{display:none}
+      .dashboard,.studio{grid-template-columns:minmax(0,1fr)}.verse-body{min-height:115px}.verse-panel{padding-top:15px}.verse-text{font-size:clamp(31px,9vw,45px)}.hero-ornament{width:190px;height:190px;left:-52px}.tracker{padding:14px}.tracker-actions{padding-top:11px}
+      .section-heading{gap:7px}.section-heading h2{font-size:19px}.section-heading p{font-size:11px}.section-heading .tile-icon{width:37px;height:37px}.format-tag{font-size:10px;padding:5px 6px}.format-tag .icon{width:12px;height:12px}
+      .stage{border-inline-start:0;border-block-start:1px solid var(--line);padding:13px 12px 17px}.site-footer{padding-bottom:calc(70px + env(safe-area-inset-bottom))}.toast{inset:auto auto calc(62px + env(safe-area-inset-bottom)) 12px}
+    }
+    @media(max-width:365px){.format-tag .icon{display:none}.swatches{gap:5px}.swatch{font-size:9px}.controls{padding:13px}.part-grid{grid-template-columns:repeat(5,1fr)}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#home">انتقل إلى المحتوى</a>
+  <div id="root"><p class="boot">جاري فتح أثر…</p></div>
+  <noscript><p style="text-align:center">فعّل JavaScript لاستخدام التلاوة واستوديو البطاقات ومتابعة الورد.</p></noscript>
+
+  <script type="text/babel">
+    const {useState,useEffect,useRef,useLayoutEffect} = React;
+    const ar = new Intl.NumberFormat('ar-EG',{useGrouping:false});
+    const num = n => ar.format(n);
+    const storage = {
+      get(key,fallback){try{return JSON.parse(localStorage.getItem('athar:'+key)) ?? fallback}catch{return fallback}},
+      set(key,value){try{localStorage.setItem('athar:'+key,JSON.stringify(value))}catch{}}
+    };
+
+    // Inline SVG paths from Lucide; no icon runtime or image requests are needed.
+    const paths = {
+      book:<><path d="M12 7v14m0-14a5 5 0 0 0-5-5H3a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h4a5 5 0 0 1 5 5 5 5 0 0 1 5-5h4a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1h-4a5 5 0 0 0-5 5Z" transform="translate(1 1) scale(.92)"/></>,
+      home:<><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21v-7h6v7"/></>,
+      image:<><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></>,
+      list:<><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m7.5 12 2.5 2.5 6-6"/></>,
+      calendar:<><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></>,
+      sparkle:<><path d="M9 2l1.9 5.8L17 10l-6.1 2.2L9 18l-1.9-5.8L1 10l6.1-2.2L9 2Zm10 11v6m-3-3h6m-2-14v4m-2-2h4"/></>,
+      sun:<><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></>,
+      bookmark:<path d="M6 4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v17l-6-4-6 4z"/>,
+      play:<path d="m9 5 12 7-12 7z"/>,
+      pause:<><path d="M8 5h2v14H8zM14 5h2v14h-2z"/></>,
+      check:<path d="m5 12 4 4L19 6"/>,
+      share:<><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 13.5 6.6 4m0-11-6.6 4"/></>,
+      info:<><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></>,
+      layers:<><path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5"/></>,
+      phone:<><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 18h.01"/></>,
+      chevron:<path d="m6 9 6 6 6-6"/>,
+      right:<path d="M4 6h16M9 10h11M4 14h16M9 18h11"/>,
+      center:<path d="M4 6h16m-13 4h10M4 14h16m-13 4h10"/>,
+      left:<path d="M4 6h16M4 10h11M4 14h16M4 18h11"/>,
+      download:<><path d="M12 3v12m-4-4 4 4 4-4M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></>,
+      eye:<><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.5"/></>,
+      close:<path d="m6 6 12 12M18 6 6 18"/>
+    };
+    function Icon({name}){return <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>}
+    function Brand(){return <a className="brand" href="#home" aria-label="أثر، الرئيسية"><span className="brand-icon"><svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 20c-5-3.8-10-4.3-15-2.9v13.2c5-1.4 10-.9 15 2.9 5-3.8 10-4.3 15-2.9V17.1c-5-1.4-10-.9-15 2.9Zm0 0v13.2M20 5v9m-4.5-4.5h9m-13 2.8h.1m16.8 0h.1"/></svg></span><span className="brand-text"><strong>أثر</strong><small>ATHAR</small></span></a>}
+    const motif = '<svg xmlns="http://www.w3.org/2000/svg" width="74" height="74" viewBox="0 0 74 74"><g fill="none" stroke="#d7ba70" stroke-width=".66"><path d="M37 3l9.95 14.1L61 13l-4.1 14.05L71 37l-14.1 9.95L61 61l-14.05-4.1L37 71l-9.95-14.1L13 61l4.1-14.05L3 37l14.1-9.95L13 13l14.05 4.1z"/><path d="M37 11 63 37 37 63 11 37zM19 19h36v36H19zM0 0l13 13M74 0 61 13M74 74 61 61M0 74l13-13"/></g></svg>';
+    document.documentElement.style.setProperty('--pattern',`url("data:image/svg+xml,${encodeURIComponent(motif)}")`);
+    function Rosette({className=''}){return <svg className={'rosette '+className} viewBox="0 0 240 240" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="120" cy="120" r="112" strokeDasharray="1 5"/><circle cx="120" cy="120" r="104" strokeWidth=".6"/><circle cx="120" cy="120" r="98" strokeWidth=".65"/>{Array.from({length:8},(_,i)=><g key={i} transform={`rotate(${45*i} 120 120)`}><path d="M120 22 140 72 177 62 167 100 214 120 167 140 177 178 140 168 120 218" strokeWidth=".75"/><path d="M120 37 135 84 169 71 156 105 203 120 156 135 169 169 135 156 120 203" strokeWidth=".55"/></g>)}<circle cx="120" cy="120" r="29" strokeWidth=".7"/><path d="m120 101 6 13 13 6-13 6-6 13-6-13-13-6 13-6z"/></svg>}
+
+    const samples = [
+      {s:94,a:6,name:'الشرح',text:'إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا',reflection:'تأمّل كلمة «مع»: قد تكون أسباب التيسير حاضرةً وأنت لا تزال في قلب الشدّة.',tafsir:'إنّ مع الضيق والشدة سهولةً وفرجًا.',context:'لا نعرض سببًا خاصًا ثابتًا لهذه الآية. جاءت الآية في سياق تذكير الله نبيّه ﷺ بما منّ به عليه، وتأكيد الوعد باليسر مع العسر.'},
+      {s:93,a:5,name:'الضحى',text:'وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰٓ',reflection:'هذا وعدٌ للنبي ﷺ. وفي تأمّله ما يوقظ الرجاء في كرم الله، حتى حين يتأخّر ما نرجوه.',tafsir:'ولسوف يعطيك ربك يا محمد من خير الدنيا والآخرة حتى ترضى.',context:'ورد في صحيح البخاري عن جندب رضي الله عنه أن امرأةً عيّرت النبي ﷺ حين اشتكى فلم يقم ليلتين أو ثلاثًا، فنزل صدر سورة الضحى. وهذا سياقٌ لنزول السورة، لا سببٌ خاص بهذه الآية.',source:'صحيح البخاري، كتاب التفسير، سورة الضحى'},
+      {s:55,a:13,name:'الرحمن',text:'فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ',reflection:'اختر نعمةً اعتدتها فلم تعد تستحضر فضلها، واحمد الله عليها اليوم.',tafsir:'فبأيّ نِعم ربكما الدينية والدنيوية تكذّبان يا معشر الجنّ والإنس؟',context:'لا نعرض سببًا خاصًا ثابتًا لهذه الآية. يتكرّر الاستفهام في السورة لتذكير الإنس والجنّ بنعم الله ودعوتهم إلى الإقرار بها.'},
+      {s:94,a:5,name:'الشرح',text:'فَإِنَّ مَعَ ٱلْعُسْرِ يُسْرًا',reflection:'حين يضيق بك أمر، تذكّر وعد الله وابحث عمّا يسّره لك ولو كان خطوةً صغيرة.',tafsir:'فإنّ مع الشدة سهولةً، ومع الضيق فرجًا.',context:'لا نعرض سببًا خاصًا ثابتًا لهذه الآية. ورد الوعد باليسر عقب ذكر ما أنعم الله به على نبيّه ﷺ من شرح الصدر ووضع الوزر.'},
+      {s:94,a:8,name:'الشرح',text:'وَإِلَىٰ رَبِّكَ فَٱرْغَب',reflection:'إذا فرغت من مشاغلك، خذ لحظةً تتوجّه فيها إلى الله بالدعاء.',tafsir:'وإلى ربك وحده فتوجّه بالرغبة والدعاء.'},
+      {s:112,a:2,name:'الإخلاص',text:'ٱللَّهُ ٱلصَّمَدُ',reflection:'الغنيّ عن خلقه هو الذي يقصده الجميع في حاجاتهم. استحضر هذا المعنى قبل دعائك.',tafsir:'الله الذي يُقصَد في الحوائج، المستغني عن جميع خلقه.'}
+    ];
+    const sampleByKey = new Map(samples.map(v=>[`${v.s}:${v.a}`,v]));
+    const fallback = [...new Set(samples.map(v=>v.s))].sort((a,b)=>a-b).map(s=>({
+      number:s,name:'سورة '+samples.find(v=>v.s===s).name,
+      ayahs:samples.filter(v=>v.s===s).sort((a,b)=>a.a-b.a).map(v=>({numberInSurah:v.a,text:v.text}))
+    }));
+    const backgrounds = [{key:'geo',name:'زخرفة إسلامية'},{key:'night',name:'ليل مرصّع'},{key:'dunes',name:'كثبان هادئة'},{key:'emerald',name:'زمرد هادئ'}];
+    const today = new Date();
+    const dayNo = Math.floor(Date.UTC(today.getFullYear(),today.getMonth(),today.getDate())/86400000);
+    const daily = samples[[0,1,0,2,0,3,1][today.getDay()]];
+    const dateAr = (()=>{try{return new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura',{day:'numeric',month:'long'}).format(today)}catch{return today.toLocaleDateString('ar')}})();
+    const navItems = [{id:'home',label:'الرئيسية',icon:'home'},{id:'studio',label:'استوديو البطاقات',icon:'image'},{id:'tracker',label:'ورد التدبر',icon:'list'}];
+    const tasks = ['قراءة آية اليوم','تدبّر معنى الآية','قراءة وردي من القرآن'];
+    function Navigation({active,setActive,mobile=false}){return <nav className={mobile?'mobile-nav':'nav'} aria-label={mobile?'القائمة السفلية':'القائمة الرئيسية'}>{navItems.map(n=><a key={n.id} href={'#'+n.id} onClick={()=>setActive(n.id)} aria-current={active===n.id?'location':undefined}><Icon name={n.icon}/>{n.label}</a>)}</nav>}
+    function Progress({done,total,label}){return <div className="progress-block"><div className="progress-label"><span>{label}</span><b>{num(done)} من {num(total)}</b></div><div className="progress-track" role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={total} aria-valuenow={done}><div className="progress-fill" style={{'--progress':100*done/total+'%'}}/></div></div>}
+    function AudioPlayer({verse}){
+      const ref=useRef(null);
+      const [playing,setPlaying]=useState(false),[time,setTime]=useState(0),[duration,setDuration]=useState(0),[speed,setSpeed]=useState(1),[error,setError]=useState('');
+      const audioUrl=`https://everyayah.com/data/Alafasy_128kb/${String(verse.s).padStart(3,'0')}${String(verse.a).padStart(3,'0')}.mp3`;
+      const stamp=t=>`${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`;
+      async function toggle(){
+        const el=ref.current;
+        if(!el.paused){el.pause();return}
+        if(error){setError('');el.load();el.playbackRate=speed}
+        try{await el.play()}catch(e){if(e.name!=='AbortError')setError('تعذّر تشغيل التلاوة. تحقّق من الاتصال ثم حاول مجددًا.')}
+      }
+      return <>
+        <audio ref={ref} src={audioUrl} preload="none" onPlay={()=>{setPlaying(true);setError('')}} onPause={()=>setPlaying(false)} onEnded={()=>setPlaying(false)} onTimeUpdate={e=>setTime(e.currentTarget.currentTime)} onDurationChange={e=>setDuration(Number.isFinite(e.currentTarget.duration)?e.currentTarget.duration:0)} onError={()=>{setPlaying(false);setError('تعذّر تحميل التلاوة. يمكنك إعادة المحاولة.')}}/>
+        <div className="audio-box" aria-label="مشغّل تلاوة آية اليوم">
+          <button className="audio-play" type="button" onClick={toggle} aria-label={playing?'إيقاف التلاوة مؤقتًا':'تشغيل التلاوة'}><Icon name={playing?'pause':'play'}/></button>
+          <div className="audio-info"><div className="audio-label"><span>تلاوة مشاري العفاسي</span><small dir="ltr">{stamp(time)} / {duration?stamp(duration):'–:––'}</small></div>
+            <input className="range" type="range" aria-label="موضع التلاوة بالثواني" disabled={!duration} min="0" max={duration||1} step=".1" value={Math.min(time,duration)} style={{'--filled':(duration?100*time/duration:0)+'%'}} onChange={e=>{const t=Number(e.target.value);ref.current.currentTime=t;setTime(t)}}/>
+          </div>
+          <button className="speed" type="button" dir="ltr" aria-label={`سرعة التلاوة ${speed}، اضغط للتغيير`} onClick={()=>{const list=[1,1.25,1.5,2,.75],next=list[(list.indexOf(speed)+1)%list.length];setSpeed(next);ref.current.playbackRate=next}}>{speed}×</button>
+        </div>
+        {error&&<p className="audio-error" role="status">{error}</p>}
+      </>
+    }
+    function VerseOfDay({notify}){
+      const key=`saved:${daily.s}:${daily.a}`;
+      const [saved,setSaved]=useState(()=>storage.get(key,false));
+      return <article className="panel verse-panel" aria-labelledby="daily-title">
+        <Rosette className="hero-ornament"/>
+        <div className="panel-top"><h2 className="day-tag" id="daily-title"><Icon name="sun"/> آية اليوم</h2><button type="button" className="icon-btn" aria-label={saved?'إزالة علامة الآية':'وضع علامة على الآية'} title={saved?'إزالة العلامة':'وضع علامة'} aria-pressed={saved} onClick={()=>{storage.set(key,!saved);setSaved(!saved);notify(saved?'أُزيلت علامة الآية.':'وُضعت علامة على الآية في هذا الجهاز.')}}><Icon name="bookmark"/></button></div>
+        <div className="verse-body"><blockquote className="verse-text">﴿ {daily.text} ﴾</blockquote><p className="verse-meta">سورة {daily.name} <span aria-hidden="true">·</span> الآية {num(daily.a)}</p></div>
+        <div className="reflection"><Icon name="sparkle"/><div><strong>تدبّر الآية</strong><p>{daily.reflection}</p></div></div>
+        <AudioPlayer verse={daily}/>
+      </article>
+    }
+    function Tracker({open,share}){
+      const key='daily:'+dayNo;
+      const [checks,setChecks]=useState(()=>storage.get(key,[false,false,false]));
+      function toggle(i){const next=checks.map((v,j)=>i===j?!v:v);setChecks(next);storage.set(key,next)}
+      return <section id="tracker" className="panel tracker" aria-labelledby="tracker-title">
+        <div className="tracker-top"><div className="title-group"><span className="tile-icon"><Icon name="list"/></span><div><h2 id="tracker-title">ورد التدبّر</h2><p>تابع وردك خطوةً بخطوة</p></div></div><button type="button" className="subtle" onClick={()=>open('parts')}><Icon name="book"/> ختمتي</button></div>
+        <Progress done={checks.filter(Boolean).length} total={tasks.length} label="إنجاز اليوم"/>
+        <div className="tasks">{tasks.map((label,i)=><label key={label} className="task"><input type="checkbox" checked={checks[i]} onChange={()=>toggle(i)}/><span className="check-icon" aria-hidden="true"><Icon name="check"/></span><span>{label}</span><span className="task-number" aria-hidden="true">{num(i+1)}</span></label>)}</div>
+        <div className="tracker-actions"><button className="outline-btn" type="button" onClick={()=>open('context')}><Icon name="info"/> سبب النزول</button><button className="share-btn" type="button" onClick={share}><Icon name="share"/> شارك الأجر</button></div>
+      </section>
+    }
+
+    const stars = Array.from({length:74},(_,i)=>({x:(i*71.31+13)%270,y:(i*39.47+7)%452,r:i%9===0?1.4:i%4===0?.85:.52}));
+    function Art({theme}){
+      return <div className={'art '+theme} aria-hidden="true">
+        {theme==='night'&&<svg viewBox="0 0 270 480" preserveAspectRatio="xMidYMid slice"><g fill="#f6dda0">{stars.map((p,i)=><circle key={i} cx={p.x} cy={p.y} r={p.r} opacity={.25+(i%5)*.14}/>)}</g><path d="M212 46a20 20 0 1 0 20 29 22 22 0 0 1-20-29Z" fill="#f0d38c" opacity=".83"/><path d="m49 69 2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#f0d38c" opacity=".8"/><path d="M0 426 46 390l34 21 39-42 33 40 40-17 78 35v53H0z" fill="#0c1525" opacity=".64"/></svg>}
+        {theme==='dunes'&&<svg viewBox="0 0 270 480" preserveAspectRatio="xMidYMid slice"><circle cx="201" cy="98" r="33" fill="#ebbc7a" opacity=".68"/><path d="M0 355c53-21 85-53 137-41 47 12 75 29 133 15v151H0z" fill="#a7754c"/><path d="M0 371c66 35 123-33 178-31 40 2 63 14 92 29v111H0z" fill="#78583d"/><path d="M0 413c61-23 107-19 168 2 41 14 74 7 102-6v71H0z" fill="#4d3f31"/><path d="M0 371c66 35 123-33 178-31 40 2 63 14 92 29M0 413c61-23 107-19 168 2 41 14 74 7 102-6" stroke="#f3cc84" strokeWidth=".7" fill="none" opacity=".58"/></svg>}
+        {theme==='emerald'&&<svg viewBox="0 0 270 480" preserveAspectRatio="xMidYMid slice" fill="none" stroke="#d2b775" opacity=".35"><path d="M-24 151C39 69 64 43 136 14 206 56 228 83 294 151M-24 160C39 78 64 52 136 23 206 65 228 92 294 160M-24 329c63 82 88 108 160 137 70-42 92-69 158-137m-318-9c63 82 88 108 160 137 70-42 92-69 158-137" strokeWidth=".8"/></svg>}
+      </div>
+    }
+
+    function Studio({notify}){
+      const request = useRef(new URLSearchParams(location.search));
+      const sharedS = Number(request.current.get('surah')), sharedA = Number(request.current.get('ayah'));
+      const initial = sampleByKey.get(`${sharedS}:${sharedA}`) || daily;
+      const [data,setData]=useState(fallback),[status,setStatus]=useState('loading'),[s,setS]=useState(initial.s),[a,setA]=useState(initial.a);
+      const [theme,setTheme]=useState('geo'),[size,setSize]=useState(32),[align,setAlign]=useState('center'),[show,setShow]=useState(false);
+      const [tafsir,setTafsir]=useState(null),[exporting,setExporting]=useState(false),[fit,setFit]=useState(size);
+      const card=useRef(null),main=useRef(null),tafsirCache=useRef(new Map());
+      useEffect(()=>{
+        const controller=new AbortController();
+        const timer=setTimeout(()=>controller.abort(),12000);
+        (async()=>{
+          try{
+            const res=await fetch('https://api.alquran.cloud/v1/quran/quran-uthmani',{signal:controller.signal});
+            if(!res.ok)throw new Error();
+            const result=await res.json();
+            const surahs=result.data?.surahs;
+            if(!Array.isArray(surahs)||surahs.length!==114||surahs.some(x=>!x.ayahs?.length))throw new Error();
+            setData(surahs);setStatus('ready');
+            const linked=surahs.find(x=>x.number===sharedS);
+            if(linked?.ayahs.some(x=>x.numberInSurah===sharedA)&&!sampleByKey.has(`${sharedS}:${sharedA}`)){setS(sharedS);setA(sharedA)}
+          }catch{setStatus('offline')}finally{clearTimeout(timer)}
+        })();
+        return ()=>{clearTimeout(timer);controller.abort()};
+      },[]);
+      const surah=data.find(x=>x.number===s)||data[0];
+      const ayah=surah.ayahs.find(x=>x.numberInSurah===a)||surah.ayahs[0];
+      const verseKey=`${surah.number}:${ayah.numberInSurah}`;
+      const sample=sampleByKey.get(verseKey), name=sample?'سورة '+sample.name:surah.name.startsWith('سورة ')?surah.name:'سورة '+surah.name;
+      const localTafsir=sample?.tafsir;
+      const remote=tafsir?.key===verseKey?tafsir:null;
+      const tafsirText=localTafsir||remote?.text;
+      const interpretation=show?tafsirText:null;
+      useEffect(()=>{
+        if(!show||localTafsir)return;
+        let active=true;
+        const cached=tafsirCache.current.get(verseKey);
+        if(cached){setTafsir(cached);return}
+        const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),7000);
+        setTafsir({key:verseKey,loading:true});
+        (async()=>{
+          try{
+            const res=await fetch(`https://api.quran.com/api/v4/tafsirs/16/by_ayah/${verseKey}`,{signal:ctl.signal});
+            if(!res.ok)throw new Error();
+            const json=await res.json();
+            const source=json.tafsir?.text;
+            if(typeof source!=='string')throw new Error();
+            const doc=new DOMParser().parseFromString(source,'text/html');
+            const text=doc.body.textContent.trim();
+            if(!text)throw new Error();
+            const record={key:verseKey,text};
+            tafsirCache.current.set(verseKey,record);
+            if(active)setTafsir(record);
+          }catch{if(active)setTafsir({key:verseKey,error:true})}
+          finally{clearTimeout(timer)}
+        })();
+        return ()=>{active=false;clearTimeout(timer);ctl.abort()};
+      },[show,verseKey,localTafsir]);
+      useLayoutEffect(()=>{
+        let active=true;
+        function measure(){
+          const box=card.current, mid=main.current;
+          if(!active||!box||!mid)return;
+          const line=mid.querySelector('.card-verse');
+          const available=box.clientHeight-box.querySelector('.card-brand').offsetHeight-box.querySelector('.ornament-line').offsetHeight-parseFloat(getComputedStyle(box).paddingTop)-parseFloat(getComputedStyle(box).paddingBottom)-10;
+          let n=size;
+          const update=()=>{line.style.setProperty('--print-size',n+'px');line.style.setProperty('--print-fluid',(n/2.7)+'cqi')};
+          update();
+          while(mid.scrollHeight>available&&n>10){n--;update()}
+          setFit(n);
+        }
+        measure();
+        const observer=window.ResizeObserver?new ResizeObserver(measure):null;
+        if(card.current)observer?.observe(card.current);
+        document.fonts?.ready.then(measure);
+        return ()=>{active=false;observer?.disconnect()};
+      },[size,verseKey,ayah.text,interpretation]);
+      const tooLong=Boolean(interpretation && interpretation.length>440);
+      const printTafsir=tooLong?null:interpretation;
+      async function download(){
+        if(!window.html2canvas){notify('لم تُحمّل أداة التصدير. أعد تحميل الصفحة وحاول مرة أخرى.');return}
+        setExporting(true);
+        try{
+          if(document.fonts){await document.fonts.ready}
+          const node=card.current;
+          const scale=1080/node.getBoundingClientRect().width;
+          const shot=await window.html2canvas(node,{scale,backgroundColor:theme==='night'?'#131f3b':'#103a2d',logging:false,scrollX:window.scrollX,scrollY:window.scrollY,onclone:(doc)=>{
+            const copied=doc.querySelector('.export-card');
+            const line=copied.querySelector('.card-verse');
+            const font=getComputedStyle(node.querySelector('.card-verse')).fontSize;
+            line.style.fontSize=font;
+            copied.querySelectorAll('svg path,svg circle').forEach(shape=>{
+              const original=shape.getAttribute('fill');
+              if(original==='currentColor')shape.setAttribute('fill','#efdaa2');
+            });
+          }});
+          const final=document.createElement('canvas');final.width=1080;final.height=1920;
+          final.getContext('2d').drawImage(shot,0,0,1080,1920);
+          const blob=await new Promise((resolve,reject)=>final.toBlob(b=>b?resolve(b):reject(new Error()),'image/png'));
+          const url=URL.createObjectURL(blob);
+          const link=document.createElement('a');link.href=url;link.download=`athar-${surah.number}-${ayah.numberInSurah}.png`;
+          document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);
+          notify('بطاقتك جاهزة بصيغة PNG.');
+        }catch{notify('تعذّر تنزيل البطاقة. حاول مجددًا.')}
+        finally{setExporting(false)}
+      }
+      return <section id="studio" aria-labelledby="studio-title">
+        <div className="section-heading"><div className="title-group"><span className="tile-icon"><Icon name="image"/></span><div><h2 id="studio-title">استوديو البطاقات</h2><p>صمّم بطاقة بآية تحبّها وشاركها.</p></div></div><span className="format-tag"><Icon name="phone"/> مقاس القصص <b dir="ltr">9:16</b></span></div>
+        <div className="panel studio">
+          <div className="controls">
+            <div className="section-mini"><h3><Icon name="book"/> اختر الآية</h3><span className="data-status" role="status">{status==='ready'?'المصحف بالرسم العثماني':status==='offline'?'آيات مختارة · دون اتصال بالمصحف':'جاري تحميل المصحف…'}</span></div>
+            <div className="select-row">
+              <label><span className="field-title">السورة</span><div className="select-shell"><select value={surah.number} onChange={e=>{const next=data.find(x=>x.number===Number(e.target.value));setS(next.number);setA(next.ayahs[0].numberInSurah)}}>{data.map(x=><option key={x.number} value={x.number}>{x.name.startsWith('سورة ')?x.name:'سورة '+x.name}</option>)}</select><Icon name="chevron"/></div></label>
+              <label><span className="field-title">رقم الآية</span><div className="select-shell"><select value={ayah.numberInSurah} onChange={e=>setA(Number(e.target.value))}>{surah.ayahs.map(x=><option key={x.numberInSurah} value={x.numberInSurah}>الآية {num(x.numberInSurah)}</option>)}</select><Icon name="chevron"/></div></label>
+            </div>
+            <div className="separator" aria-hidden="true"/>
+            <div><div className="section-mini field-title"><h3><Icon name="layers"/> خلفية البطاقة</h3></div><div className="swatches" role="group" aria-label="خلفية البطاقة">{backgrounds.map(b=><button className="swatch" key={b.key} type="button" aria-pressed={theme===b.key} onClick={()=>setTheme(b.key)}><span className="swatch-preview"><Art theme={b.key}/>{theme===b.key&&<span className="swatch-check"><Icon name="check"/></span>}</span>{b.name}</button>)}</div></div>
+            <div className="adjust-row">
+              <div><label className="field-title" htmlFor="font-size">حجم الخط</label><div className="slider-box"><input className="range" id="font-size" type="range" min="18" max="50" value={size} style={{'--filled':((size-18)/32*100)+'%'}} onChange={e=>setSize(Number(e.target.value))}/><output htmlFor="font-size">{num(size)}</output></div></div>
+              <div><span className="field-title">محاذاة النص</span><div className="align-box" role="group" aria-label="محاذاة النص">{[['right','يمين'],['center','توسيط'],['left','يسار']].map(([k,label])=><button type="button" key={k} onClick={()=>setAlign(k)} aria-pressed={align===k} aria-label={label} title={label}><Icon name={k}/></button>)}</div></div>
+            </div>
+            <label className="switch-row"><span><strong>إظهار التفسير المختصر</strong><small>أضف معنى الآية أسفل النص</small></span><input className="switch" type="checkbox" checked={show} onChange={e=>setShow(e.target.checked)}/></label>
+            {show&&!localTafsir&&<p className="fit-note" role="status">{remote?.error?'التفسير غير متاح الآن، لكن يمكنك تنزيل الآية دون تفسير.':tooLong?'هذا التفسير أطول من المساحة المتاحة، لذا لن يظهر في البطاقة.':!tafsirText?'جاري تحميل التفسير…':''}</p>}
+            {fit<size&&<p className="fit-note">صُغّر الخط تلقائيًا ليتّسع نص الآية.</p>}
+            <button className="primary" type="button" onClick={download} disabled={exporting}><Icon name="download"/> {exporting?'جاري تجهيز البطاقة…':'تحميل البطاقة'}{!exporting&&<span dir="ltr">PNG</span>}</button>
+          </div>
+          <div className="stage">
+            <div className="stage-bar"><span className="stage-label"><Icon name="eye"/> معاينة البطاقة</span><small>1080 × 1920</small></div>
+            <figure className="card-frame" aria-label="معاينة الصورة التي سيتم تنزيلها">
+              <div className="export-card" ref={card}>
+                <Art theme={theme}/>
+                <div className="card-brand"><Icon name="book"/>أثر</div>
+                <div className="card-main" ref={main}>
+                  <blockquote className="card-verse" style={{textAlign:align,'--print-size':fit+'px','--print-fluid':(fit/2.7)+'cqi'}}>﴿ {ayah.text.trim()} ﴾</blockquote>
+                  <p className="card-meta">{name} · الآية {num(ayah.numberInSurah)}</p>
+                  {printTafsir&&<p className="card-tafsir">{printTafsir}<small>{localTafsir?'المعنى بإيجاز':'التفسير الميسّر'}</small></p>}
+                </div>
+                <span className="ornament-line" aria-hidden="true"><i/></span>
+              </div>
+            </figure>
+            <p className="stage-note">صورة عمودية عالية الدقّة، مناسبة للقصص والريلز.</p>
+          </div>
+        </div>
+      </section>
+    }
+
+    function App(){
+      const hash=()=>navItems.find(n=>'#'+n.id===location.hash)?.id||'home';
+      const [active,setActive]=useState(hash),[message,setMessage]=useState(''),[modal,setModal]=useState(null),[shareText,setShareText]=useState('');
+      const [parts,setParts]=useState(()=>storage.get('parts',[]));
+      const dialog=useRef(null),toastTimer=useRef(null),copyField=useRef(null);
+      function notify(text){clearTimeout(toastTimer.current);setMessage(text);toastTimer.current=setTimeout(()=>setMessage(''),4000)}
+      useEffect(()=>{
+        function changed(){setActive(hash())}
+        window.addEventListener('hashchange',changed);
+        if(location.hash)requestAnimationFrame(()=>document.getElementById(hash())?.scrollIntoView({behavior:'instant'}));
+        return ()=>{window.removeEventListener('hashchange',changed);clearTimeout(toastTimer.current)};
+      },[]);
+      useEffect(()=>{
+        if(modal&&!dialog.current.open)dialog.current.showModal();
+        if(!modal&&dialog.current.open)dialog.current.close();
+        if(modal==='share')copyField.current?.select();
+      },[modal]);
+      function togglePart(n){
+        const next=parts.includes(n)?parts.filter(x=>x!==n):[...parts,n];
+        setParts(next);storage.set('parts',next);
+      }
+      async function share(){
+        const url=new URL(location.href);
+        url.searchParams.set('surah',daily.s);url.searchParams.set('ayah',daily.a);url.hash='studio';
+        const text=`﴿ ${daily.text} ﴾\nسورة ${daily.name} · الآية ${num(daily.a)}\n${url.href}`;
+        try{await navigator.clipboard.writeText(text);notify('نُسخت الآية مع رابطها.')}
+        catch{
+          const field=document.createElement('textarea');
+          field.value=text;field.readOnly=true;field.style.cssText='position:fixed;top:0;left:0;opacity:0';
+          const previous=document.activeElement;document.body.append(field);field.select();
+          let copied=false;try{copied=document.execCommand('copy')}catch{}
+          field.remove();previous?.focus();
+          if(copied)notify('نُسخت الآية مع رابطها.');
+          else{setShareText(text);setModal('share')}
+        }
+      }
+      return <>
+        <header className="site-head"><div className="shell head-inner"><Brand/><Navigation active={active} setActive={setActive}/><div className="date-pill"><Icon name="calendar"/><span>{dateAr}</span></div></div></header>
+        <main className="shell" id="home" tabIndex="-1">
+          <section className="intro" aria-labelledby="main-title">
+            <div className="intro-copy"><span className="eyebrow"><Icon name="sparkle"/> مساحة للتدبّر والإبداع</span><h1 id="main-title">لحظةٌ مع <em>القرآن</em></h1><p>تأمّل آية، وتابع وردك، وشارك ما لامس قلبك.</p></div>
+            <div className="intro-art" aria-hidden="true"><Rosette/><span>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span></div>
+          </section>
+          <div className="dashboard"><VerseOfDay notify={notify}/><Tracker open={setModal} share={share}/></div>
+          <Studio notify={notify}/>
+        </main>
+        <footer className="site-footer"><div className="shell footer-inner"><p><strong>أثر</strong> · رفيقٌ لوردك اليومي</p><p>النص القرآني: <a href="https://alquran.cloud/" target="_blank" rel="noopener noreferrer">Al Quran Cloud</a></p></div></footer>
+        <Navigation active={active} setActive={setActive} mobile/>
+        {message&&<div className="toast flex items-center gap-2" role="status"><Icon name="info"/>{message}</div>}
+        <dialog ref={dialog} onClose={()=>setModal(null)} aria-labelledby="dialog-title" onClick={e=>{if(e.target===dialog.current){const r=e.currentTarget.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)setModal(null)}}}>
+          <div className="dialog-head"><h2 id="dialog-title">{modal==='parts'?'متابعة ختمتي':modal==='share'?'مشاركة الآية':'سبب النزول وسياق الآية'}</h2><button className="icon-btn" type="button" onClick={()=>setModal(null)} aria-label="إغلاق"><Icon name="close"/></button></div>
+          {modal==='parts'&&<><p className="dialog-copy">علّم كل جزء بعد إتمام قراءته. يُحفظ تقدّمك على هذا الجهاز.</p><Progress done={parts.length} total={30} label="الأجزاء المقروءة"/><div className="part-grid">{Array.from({length:30},(_,i)=>i+1).map(n=><button key={n} type="button" aria-label={'الجزء '+num(n)} aria-pressed={parts.includes(n)} onClick={()=>togglePart(n)}>{num(n)}</button>)}</div></>}
+          {modal==='context'&&<><p className="dialog-copy">{daily.context||'لا تتوفر هنا روايةٌ نعرضها في سبب نزول هذه الآية.'}</p>{daily.source&&<p className="dialog-source">{daily.source}</p>}</>}
+          {modal==='share'&&<><p className="dialog-copy">النسخ التلقائي غير متاح. يمكنك نسخ النص المحدّد ومشاركته.</p><textarea ref={copyField} className="share-copy" aria-label="نص الآية ورابطها" readOnly value={shareText}/></>}
+        </dialog>
+      </>
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+  </script>
+</body>
+</html>
